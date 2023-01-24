@@ -29,26 +29,21 @@ const App = () => {
 
   const handleNewEvent = () => {
     const updateEvents = [
+      ...events,
       {
         id: "1",
-        eventName: "test",
+        eventName: value,
       },
     ];
-    setEvents((events) => [events, updateEvents]);
-    console.log(`${events}`);
+    setEvents(updateEvents);
+    setValue("");
   };
-
-  useEffect(() => {
-    setEvents(events);
-  }, [events]);
 
   return (
     <div className="list-container">
       <div className="card-container">
-        {events.map(({ eventName, id }) => (
-          <h2>
-            {id}: {eventName}
-          </h2>
+        {events.map(({ eventName }) => (
+          <h2>{eventName}</h2>
         ))}
       </div>
       <div>
