@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { Fragment } from "react";
 import Button from "@mui/material/Button";
 import { TextField } from "@mui/material/";
+import Box from "@mui/material/Box";
 
 const App = () => {
   const [value, setValue] = useState("");
@@ -40,7 +42,7 @@ const App = () => {
   };
 
   return (
-    <div className="list-container">
+    <Fragment>
       <div className="card-container">
         {events.map(({ eventName }) => (
           <h2>{eventName}</h2>
@@ -60,7 +62,7 @@ const App = () => {
           Add To List
         </Button>
       </div>
-    </div>
+    </Fragment>
   );
 };
 
