@@ -6,9 +6,9 @@ const EventContainer = ({ events }) => {
 
     <div className="event-container" key={events.id}>
         {events.map(({ eventName }) => {
-            {console.log(`${eventName.eventName}`)}
+            {console.log(`${eventName}`)}
             return (
-                <h2>{eventName.eventName}</h2>
+                <h2>{eventName}</h2>
             );
         })}
     </div>

@@ -43,11 +43,11 @@ const App = () => {
 
   return (
     <Fragment>
-      {/* <div className="event-container">
+      <div className="event-container">
         {events.map(({ eventName }) => (
           <h2>{eventName}</h2>
         ))}
-      </div> */}
+      </div>
       <EventContainer events={events} />
 
       <div className="event-card">
