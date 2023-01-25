@@ -30,16 +30,18 @@ const App = () => {
   };
 
   const handleNewEvent = () => {
-    const updateEvents = [
-      ...events,
-      {
-        // Note: This is NOT unique if adding/deleting Events
-        id: `${events.length + 1}`,
-        eventName: value,
-      },
-    ];
-    setEvents(updateEvents);
-    setValue("");
+    if (value) {
+      const updateEvents = [
+        ...events,
+        {
+          // Note: This is NOT unique if adding/deleting Events
+          id: `${events.length + 1}`,
+          eventName: value,
+        },
+      ];
+      setEvents(updateEvents);
+      setValue("");
+    }
   };
 
   return (
