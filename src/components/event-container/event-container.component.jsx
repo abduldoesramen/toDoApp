@@ -5,12 +5,13 @@ const EventContainer = ({ events }) => {
     
 
     <div className="event-container" key={events.id}>
-        {events.map(({ eventName }) => {
-            {console.log(`${eventName}`)}
-            return (
-                <h2>{eventName}</h2>
-            );
-        })}
+        return (
+            {events.map(({ eventName }) => {
+                {console.log(`${eventName}`)}
+                    <h2>{eventName}</h2>
+            })}
+        )
+
     </div>
 }
 
