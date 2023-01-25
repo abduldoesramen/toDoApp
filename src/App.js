@@ -44,15 +44,20 @@ const App = () => {
     }
   };
 
+  const handleChangeKeyPress = (eventData) => {
+    if (eventData.keyCode === 13) {
+      handleNewEvent();
+    }
+  };
+
   return (
     <Fragment>
       <EventContainer events={events} />
-      <EventCard value={value} handleChange={handleChange} />
-      {/* <div className="event-add-button">
-        <Button variant="contained" onClick={handleNewEvent}>
-          Add To List
-        </Button>
-      </div> */}
+      <EventCard
+        value={value}
+        handleChange={handleChange}
+        handleChangeKeyPress={handleChangeKeyPress}
+      />
       <EventAddButton handleNewEvent={handleNewEvent} />
     </Fragment>
   );

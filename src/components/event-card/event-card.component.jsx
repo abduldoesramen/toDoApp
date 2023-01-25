@@ -1,7 +1,7 @@
 import "./event-card.styles.css";
 import { TextField } from "@mui/material/";
 
-const EventCard = ({ value, handleChange }) => {
+const EventCard = ({ value, handleChange, handleChangeKeyPress }) => {
     return (
         <div className="event-card">
         <TextField
@@ -10,6 +10,7 @@ const EventCard = ({ value, handleChange }) => {
           label="Enter event"
           variant="outlined"
           onChange={handleChange}
+          onKeyDown={handleChangeKeyPress}
         />
       </div>
     )
