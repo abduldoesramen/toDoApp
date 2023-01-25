@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Fragment } from "react";
-import Button from "@mui/material/Button";
 import EventContainer from "./components/event-container/event-container.component";
 import EventCard from "./components/event-card/event-card.component";
+import EventAddButton from "./components/event-add-button/event-add-button.component";
 
 const App = () => {
   const [value, setValue] = useState("");
@@ -48,11 +48,12 @@ const App = () => {
     <Fragment>
       <EventContainer events={events} />
       <EventCard value={value} handleChange={handleChange} />
-      <div className="event-add-button">
+      {/* <div className="event-add-button">
         <Button variant="contained" onClick={handleNewEvent}>
           Add To List
         </Button>
-      </div>
+      </div> */}
+      <EventAddButton handleNewEvent={handleNewEvent} />
     </Fragment>
   );
 };
