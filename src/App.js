@@ -33,7 +33,8 @@ const App = () => {
     const updateEvents = [
       ...events,
       {
-        id: "1",
+        // Note: This is NOT unique if adding/deleting Events
+        id: `${events.length + 1}`,
         eventName: value,
       },
     ];
