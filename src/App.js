@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Fragment } from "react";
 import Button from "@mui/material/Button";
 import { TextField } from "@mui/material/";
-import Box from "@mui/material/Box";
+import EventContainer from "./components/event-container/event-container.component";
 
 const App = () => {
   const [value, setValue] = useState("");
@@ -43,12 +43,14 @@ const App = () => {
 
   return (
     <Fragment>
-      <div className="card-container">
+      {/* <div className="event-container">
         {events.map(({ eventName }) => (
           <h2>{eventName}</h2>
         ))}
-      </div>
-      <div>
+      </div> */}
+      <EventContainer events={events} />
+
+      <div className="event-card">
         <TextField
           value={value}
           id="outlined-basic"
@@ -57,7 +59,7 @@ const App = () => {
           onChange={handleChange}
         />
       </div>
-      <div>
+      <div className="event-add-button">
         <Button variant="contained" onClick={handleNewEvent}>
           Add To List
         </Button>
