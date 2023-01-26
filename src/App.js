@@ -44,6 +44,15 @@ const App = () => {
     }
   };
 
+  const handleDelEvent = (id) => {
+    var tempEvents = [...events];
+    var tempIndex = tempEvents.findIndex((element) => element.id === id);
+    if (tempIndex !== -1) {
+      tempEvents.splice(tempIndex, 1);
+      setEvents(tempEvents);
+    }
+  };
+
   const handleChangeKeyPress = (eventData) => {
     if (eventData.keyCode === 13) {
       handleNewEvent();
@@ -52,7 +61,7 @@ const App = () => {
 
   return (
     <Fragment>
-      <EventContainer events={events} />
+      <EventContainer events={events} handleDelEvent={handleDelEvent} />
       <EventCard
         value={value}
         handleChange={handleChange}
