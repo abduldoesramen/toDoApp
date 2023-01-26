@@ -10,7 +10,7 @@ const EventContainer = ({ events, handleDelEvent }) => {
                 {events.map(({eventName, id}) => {
                     return (
                         <div key={id}>
-                            <p>{`${id}. ${eventName}`}</p>
+                            <p>{`id=${id}: ${eventName}`}</p>
                             <Stack spacing={2} direction="row">
                             <IconButton aria-label="delete" size="medium" onClick={() => handleDelEvent(id)}>
                                 <DeleteIcon fontSize="inherit" />

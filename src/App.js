@@ -45,18 +45,12 @@ const App = () => {
   };
 
   const handleDelEvent = (id) => {
-    const updateEvents = events.filter(function (event) {
-      var tempEvents = [...events];
-      var tempIndex = tempEvents.findIndex((element) => element.id === id);
-      if (tempIndex !== -1) {
-        tempEvents.splice(tempIndex, 1);
-        setEvents(tempEvents);
-        setValue("");
-      }
-      // console.log(`${id} at ${events.findIndex((x) => x.id === id)}`);
-    });
-
-    console.log(`${updateEvents}`);
+    var tempEvents = [...events];
+    var tempIndex = tempEvents.findIndex((element) => element.id === id);
+    if (tempIndex !== -1) {
+      tempEvents.splice(tempIndex, 1);
+      setEvents(tempEvents);
+    }
   };
 
   const handleChangeKeyPress = (eventData) => {
