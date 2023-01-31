@@ -3,6 +3,7 @@ import { Fragment } from "react";
 import EventContainer from "./components/event-container/event-container.component";
 import EventCard from "./components/event-card/event-card.component";
 import EventAddButton from "./components/event-add-button/event-add-button.component";
+import EventTranslateButton from "./components/event-translate-button/event-translate-button.component";
 
 const App = () => {
   const [value, setValue] = useState("");
@@ -80,6 +81,7 @@ const App = () => {
         handleChangeKeyPress={handleChangeKeyPress}
       />
       <EventAddButton handleNewEvent={handleNewEvent} />
+      <EventTranslateButton handleNewEvent={handleNewEvent} />
     </Fragment>
   );
 };
