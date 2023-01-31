@@ -75,6 +75,9 @@ const Home = () => {
   return (
     <Fragment>
       <Grid container alignItems="center" justify="center" direction="column">
+        <Grid item>
+          <h1>To Do App</h1>
+        </Grid>
         <EventContainer events={events} handleDelEvent={handleDelEvent} />
         <EventCard
           value={value}

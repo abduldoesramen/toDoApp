@@ -1,10 +1,10 @@
 import * as React from "react";
 import { useState } from "react";
 import { Fragment } from "react";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
+import { Link } from "react-router-dom";
 
 // Form default empty values:
 const defaultValues = {
@@ -60,9 +60,12 @@ const SignIn = () => {
               onChange={handleChange}
             />
           </Grid>
-          <Button variant="contained" type="submit">
-            Sign In
-          </Button>
+          {/* Right now, no checks are being run on this button */}
+          <Link to="/home">
+            <Button variant="contained" type="submit">
+              Sign In
+            </Button>
+          </Link>
         </Grid>
       </form>
     </Fragment>
