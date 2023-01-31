@@ -4,7 +4,7 @@ import { Fragment } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Form default empty values:
 const defaultValues = {
@@ -13,11 +13,12 @@ const defaultValues = {
 };
 
 const SignIn = () => {
-  const [showPassword, setShowPassword] = React.useState(false);
   const [formValues, setFormValues] = useState(defaultValues);
+  let navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log("i run");
     setFormValues({
       ...formValues,
       [name]: value,
@@ -27,13 +28,9 @@ const SignIn = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(formValues);
+    navigate("/home");
   };
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
   return (
     <Fragment>
       <form onSubmit={handleSubmit}>
@@ -61,11 +58,9 @@ const SignIn = () => {
             />
           </Grid>
           {/* Right now, no checks are being run on this button */}
-          <Link to="/home">
-            <Button variant="contained" type="submit">
-              Sign In
-            </Button>
-          </Link>
+          <Button variant="contained" type="submit">
+            Sign In
+          </Button>
         </Grid>
       </form>
     </Fragment>
