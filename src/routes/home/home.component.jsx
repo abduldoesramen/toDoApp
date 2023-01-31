@@ -4,6 +4,7 @@ import EventAddButton from "../../components/event-add-button/event-add-button.c
 import EventCard from "../../components/event-card/event-card.component";
 import EventContainer from "../../components/event-container/event-container.component";
 import EventTranslateButton from "../../components/event-translate-button/event-translate-button.component";
+import Grid from "@mui/material/Grid";
 
 const Home = () => {
   const [value, setValue] = useState("");
@@ -73,14 +74,18 @@ const Home = () => {
 
   return (
     <Fragment>
-      <EventContainer events={events} handleDelEvent={handleDelEvent} />
-      <EventCard
-        value={value}
-        handleChange={handleChange}
-        handleChangeKeyPress={handleChangeKeyPress}
-      />
-      <EventAddButton handleNewEvent={handleNewEvent} />
-      <EventTranslateButton handleNewEvent={handleNewEvent} />
+      <Grid container alignItems="center" justify="center" direction="column">
+        <EventContainer events={events} handleDelEvent={handleDelEvent} />
+        <EventCard
+          value={value}
+          handleChange={handleChange}
+          handleChangeKeyPress={handleChangeKeyPress}
+        />
+        <Grid item marginTop={2} marginBottom={2}>
+          <EventAddButton handleNewEvent={handleNewEvent} />
+        </Grid>
+        <EventTranslateButton handleNewEvent={handleNewEvent} />
+      </Grid>
     </Fragment>
   );
 };
