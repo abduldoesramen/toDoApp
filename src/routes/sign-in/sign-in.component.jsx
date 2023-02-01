@@ -43,11 +43,11 @@ const SignIn = () => {
 
   return (
     <Fragment>
-      <p>The current time is {currentTime}</p>
       <form onSubmit={handleSubmit}>
         <Grid container alignItems="center" justify="center" direction="column">
           <Grid item>
             <h1>Sign In</h1>
+            <p>{currentTime}</p>
           </Grid>
           <Grid item marginTop={2}>
             <TextField
