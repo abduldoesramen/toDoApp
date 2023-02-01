@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Fragment } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -14,7 +14,18 @@ const defaultValues = {
 
 const SignIn = () => {
   const [formValues, setFormValues] = useState(defaultValues);
+  const [currentTime, setCurrentTime] = useState(1);
   let navigate = useNavigate();
+
+  // Empty array conveys this function has no dependencies and won't reload
+  // everytime the time changes using FLASK
+  useEffect(() => {
+    fetch("/time")
+      .then((res) => res.json())
+      .then((data) => {
+        setCurrentTime(data.time);
+      });
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,6 +44,7 @@ const SignIn = () => {
 
   return (
     <Fragment>
+      <p>The current time is {currentTime}</p>
       <form onSubmit={handleSubmit}>
         <Grid container alignItems="center" justify="center" direction="column">
           <Grid item>
