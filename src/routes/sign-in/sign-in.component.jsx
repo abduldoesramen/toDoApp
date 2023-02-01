@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Fragment } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -14,7 +14,17 @@ const defaultValues = {
 
 const SignIn = () => {
   const [formValues, setFormValues] = useState(defaultValues);
+  const [currentTime, setCurrentTime] = useState(1);
   let navigate = useNavigate();
+
+  // From flask, empty array for no dependency spam updating with time changes
+  useEffect(() => {
+    fetch("/time")
+      .then((res) => res.json())
+      .then((data) => {
+        setCurrentTime(data.time);
+      });
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,6 +47,7 @@ const SignIn = () => {
         <Grid container alignItems="center" justify="center" direction="column">
           <Grid item>
             <h1>Sign In</h1>
+            <p>{currentTime}</p>
           </Grid>
           <Grid item marginTop={2}>
             <TextField

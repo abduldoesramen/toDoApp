@@ -21,8 +21,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start-backend": "cd backend && venv/bin/flask run --no-debugger",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test-backend": "cd backend && flask test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -50,5 +52,6 @@
     "prettier": "^2.8.3",
     "prettier-eslint-cli": "^7.1.0",
     "react-router-dom": "^6.8.0"
-  }
+  },
+  "proxy": "http://localhost:5000"
 }
