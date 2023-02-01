@@ -17,8 +17,7 @@ const SignIn = () => {
   const [currentTime, setCurrentTime] = useState(1);
   let navigate = useNavigate();
 
-  // Empty array conveys this function has no dependencies and won't reload
-  // everytime the time changes using FLASK
+  // From flask, empty array for no dependency spam updating with time changes
   useEffect(() => {
     fetch("/time")
       .then((res) => res.json())
