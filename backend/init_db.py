@@ -11,6 +11,7 @@ conn = psycopg2.connect(
 cur = conn.cursor()
 
 # Execute a command: this creates a new table
+cur.execute('DROP TABLE IF EXISTS events;')
 cur.execute('DROP TABLE IF EXISTS users;')
 cur.execute('CREATE TABLE users (UserId serial PRIMARY KEY,'
                                  'email varchar (50) NOT NULL,'
