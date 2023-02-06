@@ -19,6 +19,29 @@ database=os.getenv('database')
 
 CORS(app)
 
+# Testing database:
+conn = psycopg2.connect(f"postgresql://{username}:{password}@localhost:5432/{database}")
+cur = conn.cursor()
+
+@app.route('/add-user', methods=['GET', 'POST'])
+def add_new_user():
+    if request.method == 'POST':
+        data = request.args.to_dict()
+        print(data)
+        # emailValue = request.args.get('emailValue')
+        # passwordValue = request.args.get('passwordValue')
+        cur.execute("INSERT INTO users (UserId, email, password) VALUES (%s, %s, %s)",
+        (f"{shortuuid.uuid()}", f"{data['emailValue']}", f"{data['passwordValue']}")
+        )
+        conn.commit()
+        return 'Form submitted'
+    else:
+        return 'Form submission failed'
+
+cur.close()
+conn.close()
+
+
 try: 
     conn = psycopg2.connect(f"postgresql://{username}:{password}@localhost:5432/{database}")
     cur = conn.cursor()
