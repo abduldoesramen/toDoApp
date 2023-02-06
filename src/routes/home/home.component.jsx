@@ -8,6 +8,8 @@ import Grid from "@mui/material/Grid";
 
 const Home = () => {
   const [value, setValue] = useState("");
+  // By default, initial language is English
+  const [language, setLanguage] = useState("English");
   const [events, setEvents] = useState([
     {
       id: "0",
@@ -42,6 +44,14 @@ const Home = () => {
       ];
       setEvents(updateEvents);
       setValue("");
+    }
+  };
+
+  const handleTranslate = () => {
+    if (language === "English") {
+      setLanguage("Japanese");
+    } else {
+      setLanguage("English");
     }
   };
 
@@ -87,7 +97,10 @@ const Home = () => {
         <Grid item marginTop={2} marginBottom={2}>
           <EventAddButton handleNewEvent={handleNewEvent} />
         </Grid>
-        <EventTranslateButton handleNewEvent={handleNewEvent} />
+        <EventTranslateButton
+          handleTranslate={handleTranslate}
+          language={language}
+        />
       </Grid>
     </Fragment>
   );
