@@ -3,7 +3,7 @@ import { useState } from "react";
 import Button from "@mui/material/Button";
 
 const EventTranslateButton = ({ handleTranslate, language }) => {
-  // Local language in order to render Translate button toggle
+  // Local language in order to render Translate button toggle is based on opposite to global State language
   const renderJapanese = "Japanese 日本語";
   const renderEnglish = "English";
   var currLanguage = renderEnglish;
