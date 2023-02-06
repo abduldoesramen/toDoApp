@@ -28,7 +28,6 @@ const SignIn = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log("i run");
     setFormValues({
       ...formValues,
       [name]: value,
