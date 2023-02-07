@@ -21,6 +21,7 @@ harperdb_password = os.getenv('harperdb_password')
 
 app = Flask(__name__)
 
+# Match information for our cloud database (HarperDb in this case)
 db = harperdb.HarperDB(
     url=harperdb_url,
     username=harperdb_username,
@@ -29,63 +30,22 @@ db = harperdb.HarperDB(
 
 CORS(app)
 
-# Testing database:
-conn = psycopg2.connect(f"postgresql://{username}:{password}@localhost:5432/{database}")
-cur = conn.cursor()
-
-@app.route('/add-user', methods=['GET', 'POST'])
-def add_new_user():
-    if request.method == 'POST':
-        data = request.args.to_dict()
-        print(data)
-        cur.execute("INSERT INTO users (UserId, email, password) VALUES (%s, %s, %s)",
-        (f"{shortuuid.uuid()}", f"{data['emailValue']}", f"{data['passwordValue']}")
-        )
-        conn.commit()
-        return 'Form submitted'
-    else:
-        return 'Form submission failed'
-
-# HarperDB test routes
-
-@app.route('/harperdb')
-def harperdb_fetch_all():
-    fetch_all = db._sql('SELECT * FROM dev.users')
-    print(fetch_all)
-    return jsonify(fetch_all)
-
-@app.route('/harperdb/add-user', methods=['GET', 'POST'])
-def harperdb_add_user():
-    if request.method == 'POST':
-        data = request.args.to_dict()
-        print(data)
-
-        (f"{shortuuid.uuid()}", f"{data['email']}", f"{data['password']}")
-        add_new_user = db._sql(
-            f"INSERT INTO dev.users(UserId, email, password) VALUES ('{shortuuid.uuid()}', '{data['email']}', '{data['password']}')" 
-        )
-        print(add_new_user)
-        return 'Form submitted'
-    else:
-        return 'Form submission failed'
-
-cur.close()
-conn.close()
-
-
 try: 
+    # Attempt and set up connection and cursor in local postgres server
     conn = psycopg2.connect(f"postgresql://{username}:{password}@localhost:5432/{database}")
     cur = conn.cursor()
-    # GET: Fetch all the current users from the database
+
+    # GET: Fetch all the current users from the local postgres database
     @app.route('/', methods=['GET'])
     def fetch_all_users():
         cur.execute("SELECT * from users;")
         records = cur.fetchall()
+
         # Need to return this to tuple to the frontend
         print(records)
         return jsonify(records)
 
-    # GET: Fetch user by Email from database
+    # GET: Fetch user by Email from database via URL
     @app.route('/<string:email>', methods=['GET'])
     def fetch_user_by_email(email=None):
         cur.execute(f"""
@@ -98,6 +58,7 @@ try:
 
         return jsonify(records)
 
+    # DELETE: Delete a user by their Email from local postgres database
     @app.route('/delete/<string:email>', methods=['GET', 'DELETE'])
     def delete_user_by_email(email=None):
         cur.execute(f"""
@@ -108,23 +69,53 @@ try:
         )
         conn.commit()
         return f'User with Email: {email} has been deleted.'
+    
+    # POST: Add user to local postgres database via Postman via Body Parameters
+    @app.route('/add-user', methods=['GET', 'POST'])
+    def add_new_user():
+        if request.method == 'POST':
+            data = request.args.to_dict()
+            print(data)
+            cur.execute("INSERT INTO users (UserId, email, password) VALUES (%s, %s, %s)",
+            (f"{shortuuid.uuid()}", f"{data['emailValue']}", f"{data['passwordValue']}")
+            )
+            conn.commit()
+            return 'Form submitted'
+        else:
+            return 'Form submission failed'
 
-    # Add user via URL with username and password (CHANGE LATER)
-    # @app.route('/<email>/<userpassword>', methods=['GET', 'POST'])
-    # def add_user(email, userpassword): 
-    #     #if request.method == 'POST':
-    #     cur.execute('INSERT INTO users (UserId, email, password) VALUES (%s, %s, %s)',
-    #         (shortuuid.uuid(), email, userpassword)
-    #     )
-    #     conn.commit()
-    #     return 'ran'
+    # HarperDB test routes
+    # Note: currently, HarperDB is its own database - need to learn how to connect Postgres with HarperDb
 
-    # Time, for displaying on Front-end
+    # GET: Fetch all the current users from HarperDb cloud database
+    @app.route('/harperdb')
+    def harperdb_fetch_all():
+        fetch_all = db._sql('SELECT * FROM dev.users')
+        print(fetch_all)
+        return jsonify(fetch_all)
+
+    # POST: Add user to HarperDb cloud database via Postman via Body Parameters
+    @app.route('/harperdb/add-user', methods=['GET', 'POST'])
+    def harperdb_add_user():
+        if request.method == 'POST':
+            data = request.args.to_dict()
+            print(data)
+
+            (f"{shortuuid.uuid()}", f"{data['email']}", f"{data['password']}")
+            add_new_user = db._sql(
+                f"INSERT INTO dev.users(UserId, email, password) VALUES ('{shortuuid.uuid()}', '{data['email']}', '{data['password']}')" 
+            )
+            print(add_new_user)
+            return 'Form submitted'
+        else:
+            return 'Form submission failed'
+
+    # Time API imported from Python to show time on the front-end sign-in page
     @app.route('/time')
     def get_current_time():
         return {'time': time.ctime(int(time.time()))}
     
-    # Close cursor and connection
+    # Close cursor and connection once testing is done (avoid 'this block is still running')
     # cur.close()
     # conn.close()
 except:
