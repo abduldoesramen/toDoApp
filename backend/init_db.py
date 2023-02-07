@@ -27,7 +27,7 @@ usertwo = shortuuid.uuid()
 cur.execute('DROP TABLE IF EXISTS events;')
 cur.execute('DROP TABLE IF EXISTS users;')
 cur.execute('CREATE TABLE users (UserId varchar (100) PRIMARY KEY,'
-                                 'email varchar (50) NOT NULL,'
+                                 'email varchar (50) NOT NULL UNIQUE,'
                                  'password varchar (50) NOT NULL);'
                                  )
 cur.execute('CREATE TABLE events (EventId varchar (100) NOT NULL PRIMARY KEY,'
