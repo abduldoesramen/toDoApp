@@ -30,6 +30,24 @@ db = harperdb.HarperDB(
 
 CORS(app)
 
+conn = psycopg2.connect(f"postgresql://{username}:{password}@localhost:5432/{database}")
+cur = conn.cursor()
+
+@app.route('/react/add-user', methods=['POST'])
+def react_add_user():
+    if request.method == 'POST':
+        data = request.args.to_dict()
+        (f"{shortuuid.uuid()}", f"{data['email']}", f"{data['password']}")
+        add_new_react_user = db._sql(
+            f"INSERT INTO dev.users(UserId, email, password) VALUES ('{shortuuid.uuid()}', '{data['email']}', '{data['password']}')"
+        )
+        return 'Form submitted'
+    else:
+        return 'Form submission failed'
+
+cur.close()
+conn.close()
+
 try: 
     # Attempt and set up connection and cursor in local postgres server
     conn = psycopg2.connect(f"postgresql://{username}:{password}@localhost:5432/{database}")

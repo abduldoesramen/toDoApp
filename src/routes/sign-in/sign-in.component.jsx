@@ -8,8 +8,8 @@ import { useNavigate } from "react-router-dom";
 
 // Form default empty values:
 const defaultValues = {
-  email: "",
-  password: "",
+  emailValue: "",
+  passwordValue: "",
 };
 
 const SignIn = () => {
@@ -36,13 +36,14 @@ const SignIn = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
     console.log(formValues);
-    navigate("/home");
+    // navigate("/home");
   };
 
   return (
     <Fragment>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} method="POST" action="/add-user">
         <Grid container alignItems="center" justify="center" direction="column">
           <Grid item>
             <h1>Sign In</h1>
@@ -51,7 +52,7 @@ const SignIn = () => {
           <Grid item marginTop={2}>
             <TextField
               id="email-input"
-              name="email"
+              name="emailValue"
               label="Email"
               value={formValues.email}
               onChange={handleChange}
@@ -60,7 +61,7 @@ const SignIn = () => {
           <Grid item marginTop={2} marginBottom={2}>
             <TextField
               id="password-input"
-              name="password"
+              name="passwordValue"
               label="Password"
               type="text"
               value={formValues.password}
