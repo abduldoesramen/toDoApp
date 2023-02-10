@@ -70,10 +70,16 @@ def generate_user():
     if request.method == 'POST':
         if request.is_json:
             data = request.get_json()
-            new_user = UsersModel(email=data['email'], password=data['password'])
-            db.session.add(new_user)
-            db.session.commit()
-            return {"message": f"user {new_user.email} with id={new_user.id} has been created successfully"}
+
+            # Check if email is already inside database due constraint of every email being unique
+            exists = bool(UsersModel.query.filter_by(email=data['email']).first())
+            if exists:
+                return {"error": "A user with this email address already exists"}
+            else:
+                new_user = UsersModel(email=data['email'], password=data['password'])
+                db.session.add(new_user)
+                db.session.commit()
+                return {"message": f"user {new_user.email} with id={new_user.id} has been created successfully"}
         else:
             return {"error": "The request payload is not JSON Format"}
     else:

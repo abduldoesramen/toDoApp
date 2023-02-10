@@ -71,7 +71,7 @@ const SignIn = () => {
               id="password-input"
               name="password"
               label="Password"
-              type="text"
+              type="password"
               value={formValues.password}
               onChange={handleChange}
             />
