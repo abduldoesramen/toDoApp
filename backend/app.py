@@ -135,6 +135,9 @@ def generate_event():
 def get_current_time():
     return {'time': time.ctime(int(time.time()))}
 
+@app.route('/test')
+def test_return():
+    return {'test': "test"}
 
 if __name__ == '__main__':
     app.run(port="5000", debug=True)

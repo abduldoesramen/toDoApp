@@ -15,6 +15,7 @@ const defaultValues = {
 const SignIn = () => {
   const [formValues, setFormValues] = useState(defaultValues);
   const [currentTime, setCurrentTime] = useState(1);
+  const [currentEvent, setCurrentEvent] = useState();
   let navigate = useNavigate();
 
   // From flask, empty array for no dependency spam updating with time changes
@@ -23,6 +24,14 @@ const SignIn = () => {
       .then((res) => res.json())
       .then((data) => {
         setCurrentTime(data.time);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch("/users")
+      .then((res) => res.json())
+      .then((data) => {
+        setCurrentEvent(data.count);
       });
   }, []);
 
@@ -47,6 +56,7 @@ const SignIn = () => {
           <Grid item>
             <h1>Sign In</h1>
             <p>{currentTime}</p>
+            <p>{currentEvent}</p>
           </Grid>
           <Grid item marginTop={2}>
             <TextField
@@ -68,7 +78,23 @@ const SignIn = () => {
             />
           </Grid>
           {/* Right now, no checks are being run on this button */}
-          <Button variant="contained" type="submit">
+          <Button
+            variant="contained"
+            type="submit"
+            onClick={async () => {
+              const information = {
+                email: formValues.email,
+                password: formValues.password,
+              };
+              const response = await fetch("/users/generate", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(information),
+              });
+            }}
+          >
             Sign In
           </Button>
         </Grid>
