@@ -1,34 +1,90 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy 
-from sqlalchemy import create_engine
+from flask import Flask, request
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from decouple import config
 import os
-from dotenv import load_dotenv
-import psycopg2
 import shortuuid
 
-load_dotenv()
+app = Flask(__name__)
+USERNAME=config('username')
+PASSWORD=config('password')
+DATABASE=config('database')
 
-# PostgreSQL Database credentials loaded from the .env file
-username=os.getenv('username')
-password=os.getenv('password')
-database=os.getenv('database')
+app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{USERNAME}:{PASSWORD}@localhost:5432/{DATABASE}"
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
-db = SQLAlchemy()
+class UsersModel(db.Model):
+    __tablename__ = 'users'
 
-def create_app():
-    app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{username}:{password}@localhost/{database}"
-    db.init_app(app)
+    # Edit specifics later, i.e. id must be 22 characters, email must be unique, both email&pass must exist, etc.
+    id = db.Column(db.String(22), primary_key=True)
+    email = db.Column(db.String(50), unique=True)
+    password = db.Column(db.String(50))
 
-    db.app=app
-    with app.test_request_context():
-        db.create_all()
+    # Encode password later
+    def __init__(self, email, password):
+        self.id=shortuuid.uuid()
+        self.email=email
+        self.password=password
+
+    def __repr__(self):
+        return f"<Car {self.email}>"
+
+
+@app.route('/users', methods=['POST', 'GET'])
+def handle_users():
+    if request.method == 'POST':
+        if request.is_json:
+            data = request.get_json()
+            new_user = UsersModel(email=data['email'], password=data['password'])
+            db.session.add(new_user)
+            db.session.commit()
+            return {"message": f"user {new_user.email} has been created successfully."}
+        else:
+            return {"error:" "The request payload is not JSON Format"}
+    elif request.method == 'GET':
+        users = UsersModel.query.all()
+        results = [
+            {
+                "id": user.id,
+                "email": user.email
+            } for user in users
+        ]
+        return {"count": len(results), "cars": results}
+
+
+# from flask import Flask
+# from flask_sqlalchemy import SQLAlchemy 
+# from sqlalchemy import create_engine
+# import os
+# from dotenv import load_dotenv
+# import psycopg2
+# import shortuuid
+
+# load_dotenv()
+
+# # PostgreSQL Database credentials loaded from the .env file
+# username=os.getenv('username')
+# password=os.getenv('password')
+# database=os.getenv('database')
+
+# db = SQLAlchemy()
+
+# def create_app():
+#     app = Flask(__name__)
+#     app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{username}:{password}@localhost/{database}"
+#     db.init_app(app)
+
+#     db.app=app
+#     with app.test_request_context():
+#         db.create_all()
     
-    from .views import main
-    app.register_blueprint(main)
+#     from .views import main
+#     app.register_blueprint(main)
 
 
-    return app
+#     return app
     # conn_string = f"host='localhost' dbname='{database}' user='{username}' password='{password}'"
 
 
