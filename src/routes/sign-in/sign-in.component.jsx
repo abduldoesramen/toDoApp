@@ -15,7 +15,7 @@ const defaultValues = {
 const SignIn = () => {
   const [formValues, setFormValues] = useState(defaultValues);
   const [currentTime, setCurrentTime] = useState(1);
-  const [currentEvent, setCurrentEvent] = useState();
+  const [currentUser, setCurrentUser] = useState();
   let navigate = useNavigate();
 
   // From flask, empty array for no dependency spam updating with time changes
@@ -31,7 +31,7 @@ const SignIn = () => {
     fetch("/users")
       .then((res) => res.json())
       .then((data) => {
-        setCurrentEvent(data.count);
+        setCurrentUser(data.count);
       });
   }, []);
 
@@ -56,7 +56,6 @@ const SignIn = () => {
           <Grid item>
             <h1>Sign In</h1>
             <p>{currentTime}</p>
-            <p>{currentEvent}</p>
           </Grid>
           <Grid item marginTop={2}>
             <TextField
