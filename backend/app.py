@@ -5,6 +5,7 @@ from flask_migrate import Migrate
 from decouple import config
 import os
 import shortuuid
+import time
 
 app = Flask(__name__)
 USERNAME=config('username')
@@ -125,7 +126,17 @@ def generate_event():
         return {"error": "Method not allowed" }
 
 
+
+
+
+
+# Time API imported from Python to show time on the front-end sign-in page
+@app.route('/time')
+def get_current_time():
+    return {'time': time.ctime(int(time.time()))}
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port="5000", debug=True)
 
 
