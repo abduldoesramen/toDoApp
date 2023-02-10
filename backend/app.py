@@ -1,5 +1,6 @@
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import relationship
 from flask_migrate import Migrate
 from decouple import config
 import os
@@ -17,10 +18,11 @@ migrate = Migrate(app, db)
 class UsersModel(db.Model):
     __tablename__ = 'users'
 
-    # Edit specifics later, i.e. id must be 22 characters, email must be unique, both email&pass must exist, etc.
     id = db.Column(db.String(22), primary_key=True)
-    email = db.Column(db.String(50), unique=True)
-    password = db.Column(db.String(50))
+    email = db.Column(db.String(50), nullable=False, unique=True)
+    password = db.Column(db.String(50), nullable=False)
+
+    children = relationship("EventsModel")
 
     # Encode password later
     def __init__(self, email, password):
@@ -30,6 +32,22 @@ class UsersModel(db.Model):
 
     def __repr__(self):
         return f"<User {self.email}>"
+
+class EventsModel(db.Model):
+    __tablename__ = 'events'
+
+    # Differentiate Event_id from User_id better later, e.g. Event_id is BASED off User_id.
+    id = db.Column(db.String(22), primary_key=True)
+    event = db.Column(db.String(150))
+    user_id = db.Column(db.String(22), db.ForeignKey("users.id"))
+
+    def __init__(self, event, user_id):
+        self.id=shortuuid.uuid()
+        self.event=event
+        self.user_id=user_id
+
+    def __repr__(self):
+        return f"<Event {self.event}>"
 
 
 @app.route('/users', methods=['GET'])
@@ -77,6 +95,35 @@ def edit_user(user_id):
         db.session.delete(existing_user)
         db.session.commit()
         return {"message": f"user with email={existing_user.email} has been successfully deleted"}
+
+@app.route('/events', methods=['GET'])
+def view_events():
+    if request.method == 'GET':
+        events = EventsModel.query.all()
+        results = [
+            {
+                "id": unique_event.id,
+                "event": unique_event.event
+            } for unique_event in events
+        ]
+        return {"count": len(results), "events": results}
+    else:
+        return {"error": "Method not allowed" }
+
+@app.route('/events/add/', methods=['POST'])
+def generate_event():
+    if request.method == 'POST':
+        if request.is_json:
+            data = request.get_json()
+            new_event = EventsModel(event=data['event'], user_id=data['user_id'])
+            db.session.add(new_event)
+            db.session.commit()
+            return {"message": f"event={new_event.event} for user with id={new_event.user_id} has been created successfully"}
+        else:
+            return {"error": "The request payload is not JSON Format"}
+    else:
+        return {"error": "Method not allowed" }
+
 
 if __name__ == '__main__':
     app.run(debug=True)
