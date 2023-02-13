@@ -17,8 +17,7 @@ const defaultValues = {
 const SignIn = () => {
   const [formValues, setFormValues] = useState(defaultValues);
   const [currentTime, setCurrentTime] = useState(1);
-  const [user, setUser] = useState(null);
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState(defaultValues);
   let navigate = useNavigate();
 
   // From flask, empty array for no dependency spam updating with time changes
@@ -34,7 +33,7 @@ const SignIn = () => {
     fetch("/users")
       .then((res) => res.json())
       .then((data) => {
-        setCurrentUser(data.count);
+        //setCurrentUser(data.count);
       });
   }, []);
 
@@ -48,8 +47,9 @@ const SignIn = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formValues);
-    //setUser(formValues);
+    // TODO: this is returning undefined/default value, it is never updating
+    setCurrentUser({});
+    console.log(currentUser);
     navigate("/home");
   };
 
@@ -96,8 +96,11 @@ const SignIn = () => {
                 },
                 body: JSON.stringify(information),
               });
-              setUser(information);
-              console.log("setUser " + information.email);
+
+              // Basic error checking for HTTP call, e.g. if user exists in database already
+              if (!response.ok) {
+                throw new Error(response.status);
+              }
             }}
           >
             Sign In
