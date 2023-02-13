@@ -6,6 +6,7 @@ from decouple import config
 import os
 import shortuuid
 import time
+import random
 
 app = Flask(__name__)
 USERNAME=config('username')
@@ -22,12 +23,14 @@ class UsersModel(db.Model):
     id = db.Column(db.String(22), primary_key=True)
     email = db.Column(db.String(50), nullable=False, unique=True)
     password = db.Column(db.String(50), nullable=False)
+    profile_avatar = db.Column(db.String(100))
 
     children = relationship("EventsModel")
 
     # Encode password later
     def __init__(self, email, password):
         self.id=shortuuid.uuid()
+        self.profile_avatar=f"https://robohash.org/{random.randint(0,99)}?set=set2&size=180x180"
         self.email=email
         self.password=password
 
