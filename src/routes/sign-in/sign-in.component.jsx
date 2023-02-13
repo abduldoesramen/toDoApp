@@ -6,6 +6,8 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import { useNavigate } from "react-router-dom";
 
+// export const UserContext = React.createContext(null);
+
 // Form default empty values:
 const defaultValues = {
   email: "",
@@ -13,9 +15,9 @@ const defaultValues = {
 };
 
 const SignIn = () => {
+  // FormValues represent currentUser
   const [formValues, setFormValues] = useState(defaultValues);
   const [currentTime, setCurrentTime] = useState(1);
-  const [currentUser, setCurrentUser] = useState();
   let navigate = useNavigate();
 
   // From flask, empty array for no dependency spam updating with time changes
@@ -30,9 +32,7 @@ const SignIn = () => {
   useEffect(() => {
     fetch("/users")
       .then((res) => res.json())
-      .then((data) => {
-        setCurrentUser(data.count);
-      });
+      .then((data) => {});
   }, []);
 
   const handleChange = (e) => {
@@ -44,7 +44,7 @@ const SignIn = () => {
   };
 
   const handleSubmit = (event) => {
-    event.preventDefault();
+    // TODO: this is returning undefined/default value, it is never updating
     console.log(formValues);
     navigate("/home");
   };
@@ -92,6 +92,11 @@ const SignIn = () => {
                 },
                 body: JSON.stringify(information),
               });
+
+              // Basic error checking for HTTP call, e.g. if user exists in database already
+              if (!response.ok) {
+                throw new Error(response.status);
+              }
             }}
           >
             Sign In
