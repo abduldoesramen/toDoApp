@@ -6,6 +6,8 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import { useNavigate } from "react-router-dom";
 
+export const UserContext = React.createContext(null);
+
 // Form default empty values:
 const defaultValues = {
   email: "",
@@ -15,6 +17,7 @@ const defaultValues = {
 const SignIn = () => {
   const [formValues, setFormValues] = useState(defaultValues);
   const [currentTime, setCurrentTime] = useState(1);
+  const [user, setUser] = useState(null);
   const [currentUser, setCurrentUser] = useState();
   let navigate = useNavigate();
 
@@ -46,6 +49,7 @@ const SignIn = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(formValues);
+    //setUser(formValues);
     navigate("/home");
   };
 
@@ -92,6 +96,8 @@ const SignIn = () => {
                 },
                 body: JSON.stringify(information),
               });
+              setUser(information);
+              console.log("setUser " + information.email);
             }}
           >
             Sign In

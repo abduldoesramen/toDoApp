@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, make_response
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from flask_migrate import Migrate
@@ -65,6 +65,7 @@ def view_users():
     else:
         return {"error": "Method not allowed" }
 
+# Integrated HTTP error messages for easier debugging
 @app.route('/users/generate', methods=['POST'])
 def generate_user():
     if request.method == 'POST':
@@ -74,16 +75,18 @@ def generate_user():
             # Check if email is already inside database due constraint of every email being unique
             exists = bool(UsersModel.query.filter_by(email=data['email']).first())
             if exists:
-                return {"error": "A user with this email address already exists"}
+                return make_response({"error": "A user with this email address already exists"}, 409)
             else:
                 new_user = UsersModel(email=data['email'], password=data['password'])
                 db.session.add(new_user)
                 db.session.commit()
-                return {"message": f"user {new_user.email} with id={new_user.id} has been created successfully"}
+
+                success_message = {"message": f"user {new_user.email} with id={new_user.id} has been created successfully"}
+                return make_response(success_message, 201)
         else:
-            return {"error": "The request payload is not JSON Format"}
+            return make_response({"error": "The request payload is not JSON Format"}, 400)
     else:
-        return {"error": "Method not allowed" }
+        return make_response({"error": "Method not allowed"}, 400)
 
 @app.route('/users/<user_id>', methods=['PUT', 'DELETE'])
 def edit_user(user_id):
