@@ -43,9 +43,7 @@ const SignIn = () => {
     });
   };
 
-  const handleSubmit = (event) => {
-    // TODO: this is returning undefined/default value, it is never updating
-    console.log(formValues);
+  const handleSubmit = (e) => {
     navigate("/home");
   };
 
@@ -92,9 +90,9 @@ const SignIn = () => {
                 },
                 body: JSON.stringify(information),
               });
-
               // Basic error checking for HTTP call, e.g. if user exists in database already
               if (!response.ok) {
+                navigate("/");
                 throw new Error(response.status);
               }
             }}
