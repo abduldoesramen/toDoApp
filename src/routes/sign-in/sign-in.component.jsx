@@ -16,7 +16,6 @@ const defaultValues = {
 
 const SignIn = () => {
   // FormValues represent currentUser
-  const [errors, setErrors] = useState();
   const [formValues, setFormValues] = useState(defaultValues);
   const [currentTime, setCurrentTime] = useState(1);
   let navigate = useNavigate();
