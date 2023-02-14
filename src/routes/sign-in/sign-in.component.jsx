@@ -5,7 +5,6 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import { useNavigate } from "react-router-dom";
-import Alert from "@mui/material/Alert";
 
 // export const UserContext = React.createContext(null);
 
@@ -17,7 +16,7 @@ const defaultValues = {
 
 const SignIn = () => {
   // FormValues represent currentUser
-  const [hideError, setHideError] = useState(true);
+  const [errors, setErrors] = useState();
   const [formValues, setFormValues] = useState(defaultValues);
   const [currentTime, setCurrentTime] = useState(1);
   let navigate = useNavigate();
@@ -45,22 +44,14 @@ const SignIn = () => {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (e) => {
     // TODO: this is returning undefined/default value, it is never updating
-
-    console.log(formValues);
+    //console.log(e.target.value);
     navigate("/home");
-  };
-
-  const errorMessage = () => {
-    <div id="errorUserAlreadyExists">
-      <Alert severity="error">This is an error alert — check it out!</Alert>
-    </div>;
   };
 
   return (
     <Fragment>
-      <div>{!hideError ? <p>You can see me!</p> : null}</div>
       <form onSubmit={handleSubmit}>
         <Grid container alignItems="center" justify="center" direction="column">
           <Grid item>
@@ -104,13 +95,13 @@ const SignIn = () => {
               });
               // Basic error checking for HTTP call, e.g. if user exists in database already
               if (!response.ok) {
+                navigate("/");
                 throw new Error(response.status);
               }
             }}
           >
             Sign In
           </Button>
-          <Button onClick={() => setHideError((s) => !s)}>Hide Error</Button>
         </Grid>
       </form>
     </Fragment>
