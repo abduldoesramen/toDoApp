@@ -45,8 +45,6 @@ const SignIn = () => {
   };
 
   const handleSubmit = (e) => {
-    // TODO: this is returning undefined/default value, it is never updating
-    //console.log(e.target.value);
     navigate("/home");
   };
 
